@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <form>
+    <form id="joinRoomForm">
         <button id="createRoomButton" type="button">Create Room</button>
         <label for="roomKeyInput">Room Key:</label>
         <input id="roomKeyInput" type="text" required>
@@ -16,6 +16,17 @@
         <input id="usernameInput" type="text">
         <input type="submit" value="Join">
     </form>
+
+    <div id="chatRoom" hidden>
+        <h1 id="chatRoomKey">Room: ??</h1>
+        <form>
+            <input type="text">
+            <input type="submit">
+        </form>
+        <div id="chatWindow">
+
+        </div>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 </body>

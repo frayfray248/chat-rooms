@@ -31,6 +31,14 @@ io.on('connection', (socket) => {
         
     })
 
+    socket.on('joinRoom', (key, username) => {
+
+        socket.join(key)
+        
+        socket.emit("sendRoom", key)
+
+    })
+
 })
 
 // start server
