@@ -13,14 +13,14 @@
         <label for="roomKeyInput">Room Key:</label>
         <input id="roomKeyInput" type="text" required>
         <label for="usernameInput" required>Username:</label>
-        <input id="usernameInput" type="text">
+        <input id="usernameInput" type="text" required>
         <input type="submit" value="Join">
     </form>
 
     <div id="chatRoom" hidden>
         <h1 id="chatRoomKey">Room: ??</h1>
-        <form>
-            <input type="text">
+        <form id="messageForm">
+            <input id="messageInput" type="text">
             <input type="submit">
         </form>
         <div id="chatWindow">

@@ -17,6 +17,20 @@ const joinRoomHandler = (event) => {
     socket.emit('joinRoom', key, username)
 }
 
+const sendMessageHandler = (event) => {
+    event.preventDefault()
+
+    const socket = event.data.socket
+    const username = localStorage.getItem('username')
+    const key = localStorage.getItem('roomKey')
+
+    const message = $('#messageInput').val()
+
+    socket.emit('sendMessage', message, username, key)
+
+}
+
+
 $(function () {
 
     var socket = io();
@@ -26,10 +40,15 @@ $(function () {
     const $joinRoomForm = $('#joinRoomForm')
     const $chatRoom = $('#chatRoom')
     const $chatRoomKey = $('#chatRoomKey')
+    const $messageForm = $('#messageForm')
+    const $chatWindow = $('#chatWindow')
+
+
 
     // handlers
     $joinRoomForm.on('submit', { socket : socket},  joinRoomHandler)
     $createRoomButton.on('click', { socket : socket},  createRoomHandler)
+    $messageForm.on('submit', { socket: socket },  sendMessageHandler)
 
     // socket
     socket.on("sendKey", key => {
@@ -39,17 +58,28 @@ $(function () {
 
     })
 
-    socket.on("sendRoom", key => {
+    socket.on("sendRoom", (key, username) => {
         
+        // show chat room gui
         $joinRoomForm.hide()
         $chatRoom.show()
-
         $chatRoomKey.html(`Room: ${key}`)
 
+        // store room and username
+        localStorage.setItem('roomKey', key)
+        localStorage.setItem('username', username)
     })
+
 
     socket.on("roomNotFound", key => {
         alert(`Room ${key} not found`)
+    })
+
+    socket.on('newMessage', (message, username) => {
+        
+
+        $chatWindow.append(`<span>${username}: ${message}</span><br>`)
+
     })
 
 

@@ -18,6 +18,8 @@ app.use(express.json())
 // serve static
 app.use('/', express.static('public'))
 
+const rooms = []
+
 // socket
 io.on('connection', (socket) => {
 
@@ -27,7 +29,7 @@ io.on('connection', (socket) => {
 
         const key = crypto.randomBytes(2).toString('hex')
 
-        socket.rooms.add(key)
+        rooms.push(key)
 
         socket.emit('sendKey', key)
 
@@ -35,16 +37,20 @@ io.on('connection', (socket) => {
 
     socket.on('joinRoom', (key, username) => {
 
-        if (socket.rooms.has(key)) {
+        if (rooms.find(room => room === key)) {
             socket.join(key)
 
-            socket.emit("sendRoom", key)
+            socket.emit("sendRoom", key, username)
         }
         else {
             socket.emit("roomNotFound", key)
         }
 
+    })
 
+    socket.on('sendMessage', (message, username, room) => {
+
+        io.to(room).emit('newMessage', message, username)
 
     })
 
