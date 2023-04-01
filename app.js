@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000
 app.use(express.json())
 
 // serve static
-app.use('/', async (req, res) => res.send("Hello"))
+app.use('/', express.static('public'))
 
 // start server
 server.listen(PORT, () => {
