@@ -4,7 +4,8 @@
   "description": "A Socket IO chat room web app",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "set NODE_ENV=development&&nodemon app.js"
   },
   "keywords": [
     "chat",
@@ -15,5 +16,12 @@
     "web"
   ],
   "author": "Fraser",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
