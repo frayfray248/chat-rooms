@@ -1,0 +1,19 @@
+{
+  "name": "chat-rooms",
+  "version": "0.0.1",
+  "description": "A Socket IO chat room web app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chat",
+    "app",
+    "socket",
+    "node",
+    "chatroom",
+    "web"
+  ],
+  "author": "Fraser",
+  "license": "ISC"
+}
