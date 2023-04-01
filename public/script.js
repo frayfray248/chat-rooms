@@ -48,6 +48,10 @@ $(function () {
 
     })
 
+    socket.on("roomNotFound", key => {
+        alert(`Room ${key} not found`)
+    })
+
 
 
 })

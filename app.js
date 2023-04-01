@@ -27,15 +27,24 @@ io.on('connection', (socket) => {
 
         const key = crypto.randomBytes(2).toString('hex')
 
+        socket.rooms.add(key)
+
         socket.emit('sendKey', key)
-        
+
     })
 
     socket.on('joinRoom', (key, username) => {
 
-        socket.join(key)
-        
-        socket.emit("sendRoom", key)
+        if (socket.rooms.has(key)) {
+            socket.join(key)
+
+            socket.emit("sendRoom", key)
+        }
+        else {
+            socket.emit("roomNotFound", key)
+        }
+
+
 
     })
 
@@ -43,6 +52,6 @@ io.on('connection', (socket) => {
 
 // start server
 server.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`)
+    console.log(`Listening on port ${PORT}`)
 })
 
