@@ -25,22 +25,27 @@ io.on('connection', (socket) => {
 
     console.log(`Client ${socket.id} connected`)
 
+    // create a chat room handler
     socket.on('createRoom', () => {
 
-        const key = crypto.randomBytes(2).toString('hex')
+        const newRoomId = crypto.randomBytes(2).toString('hex')
 
-        rooms.push(key)
+        rooms.push({
+            id: newRoomId,
+            messages: []
+        })
 
-        socket.emit('sendKey', key)
+        socket.emit('sendKey', newRoomId)
 
     })
 
-    socket.on('joinRoom', (key, username) => {
+    // join a chat room handler
+    socket.on('joinRoom', (roomId, username) => {
 
-        if (rooms.find(room => room === key)) {
-            socket.join(key)
+        if (rooms.find(room => room.id === roomId)) {
+            socket.join(roomId)
 
-            socket.emit("sendRoom", key, username)
+            socket.emit("sendRoom", roomId, username)
         }
         else {
             socket.emit("roomNotFound", key)
@@ -48,9 +53,20 @@ io.on('connection', (socket) => {
 
     })
 
-    socket.on('sendMessage', (message, username, room) => {
+    // send a message handler
+    socket.on('sendMessage', (message, username, roomId) => {
 
-        io.to(room).emit('newMessage', message, username)
+        
+        io.to(roomId).emit('newMessage', message, username)
+
+    })
+
+    // get messages handler
+    socket.on('getMessages', roomId => {
+
+        const messages = rooms.find(room => room.id === roomId).messages
+
+        socket.emit('sendMessages', messages)
 
     })
 

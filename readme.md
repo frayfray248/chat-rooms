@@ -1,6 +1,6 @@
 # Chat Rooms
 ## Description
-The purpose of this app is to allow users to create and join chat rooms. They can create a chat room by generating a unique chat room id (a key) and they can use that key to join or other users to join. Once users join a chat room they may send messages which are only visable to other users in that chat room.
+The purpose of this app is to allow users to create and join chat rooms. They can create a chat room by generating a unique chat room id (a key) and they can use that key to join or other users to join. Once users join a chat room they may send messages which are only visible to other users in that chat room.
 ## Purpose
 The purpose of this app is to demonstrate a simple use of Socket IO and Node JS
 ## Features
