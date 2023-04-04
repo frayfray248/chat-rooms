@@ -8,6 +8,36 @@ const selectors = {
     roomIdInput : '#roomIdInput'
 }
 
+const chatRoom = (() => {
+
+    const appendMessage = (text, username) => {
+        $(selectors.chatWindow).append(`<span>${username}: ${text}</span><br>`)
+    }
+
+    const show = () => {
+
+        $(selectors.chatRoom).show()
+
+    }
+
+    const setUp = (room) => {
+
+        $(selectors.chatRoomId).html(`Room: ${room.id}`)
+
+        for (const message of room.messages) {
+            appendMessage(message.text, message.username)
+        }
+
+    }
+
+    return {
+        appendMessage : appendMessage,
+        show : show,
+        setUp : setUp
+    }
+
+})()
+
 const registerDOMHandlers = (socket) => {
 
     const createRoomHandler = (event) => {
@@ -60,8 +90,8 @@ const registerSocketHandlers = (socket) => {
 
         // show chat room gui
         $(selectors.joinRoomForm).hide()
-        $(selectors.chatRoom).show()
-        $(selectors.chatRoomId).html(`Room: ${room.id}`)
+        chatRoom.setUp(room)
+        chatRoom.show()
 
         // store room and username
         localStorage.setItem('roomKey', room.id)
@@ -75,9 +105,9 @@ const registerSocketHandlers = (socket) => {
 
     }
 
-    const newMessage = (message, username) => {
+    const newMessage = (text, username) => {
 
-        $(selectors.chatWindow).append(`<span>${username}: ${message}</span><br>`)
+        chatRoom.appendMessage(text, username)
 
     }
 
