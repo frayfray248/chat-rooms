@@ -1,32 +1,90 @@
-const createRoomHandler = (event) => {
-    event.preventDefault()
+const selectors = {
+    joinRoomForm :  '#joinRoomForm',
+    createRoomButton : '#createRoomButton',
+    messageForm : '#messageForm',
+    chatRoom : '#chatRoom',
+    chatRoomId : '#chatRoomId',
+    chatWindow : '#chatWindow',
+    roomIdInput : '#roomIdInput'
+}
 
-    const socket = event.data.socket
-    
-    socket.emit('createRoom')
+const registerDOMHandlers = (socket) => {
+
+    const createRoomHandler = (event) => {
+        event.preventDefault()
+
+        const socket = event.data.socket
+
+        socket.emit('createRoom')
+
+    }
+
+    const joinRoomHandler = (event) => {
+        event.preventDefault()
+
+        const socket = event.data.socket
+        const key = $('#roomIdInput').val()
+        const username = $('#usernameInput').val()
+
+        socket.emit('joinRoom', key, username)
+    }
+
+    const sendMessageHandler = (event) => {
+        event.preventDefault()
+
+        const socket = event.data.socket
+        const username = localStorage.getItem('username')
+        const key = localStorage.getItem('roomKey')
+
+        const message = $('#messageInput').val()
+
+        socket.emit('sendMessage', message, username, key)
+
+    }
+
+    $(selectors.joinRoomForm).on('submit', { socket: socket }, joinRoomHandler)
+    $(selectors.createRoomButton).on('click', { socket: socket }, createRoomHandler)
+    $(selectors.messageForm).on('submit', { socket: socket }, sendMessageHandler)
 
 }
 
-const joinRoomHandler = (event) => {
-    event.preventDefault()
+const registerSocketHandlers = (socket) => {
 
-    const socket = event.data.socket
-    const key = $('#roomKeyInput').val()
-    const username = $('#usernameInput').val()
+    const sendRoomId = (roomId) => {
 
-    socket.emit('joinRoom', key, username)
-}
+        $(selectors.roomIdInput).val(roomId)
 
-const sendMessageHandler = (event) => {
-    event.preventDefault()
+    }
 
-    const socket = event.data.socket
-    const username = localStorage.getItem('username')
-    const key = localStorage.getItem('roomKey')
+    const sendRoom = (room) => {
 
-    const message = $('#messageInput').val()
+        // show chat room gui
+        $(selectors.joinRoomForm).hide()
+        $(selectors.chatRoom).show()
+        $(selectors.chatRoomId).html(`Room: ${room.id}`)
 
-    socket.emit('sendMessage', message, username, key)
+        // store room and username
+        localStorage.setItem('roomKey', room.id)
+        localStorage.setItem('username', $('#usernameInput').val())
+
+    }
+
+    const roomNotFound = (roomId) => {
+
+        alert(`Room ${roomId} not found`)
+
+    }
+
+    const newMessage = (message, username) => {
+
+        $(selectors.chatWindow).append(`<span>${username}: ${message}</span><br>`)
+
+    }
+
+    socket.on("sendRoomId", sendRoomId)
+    socket.on("sendRoom", sendRoom)
+    socket.on("roomNotFound", roomNotFound)
+    socket.on("newMessage", newMessage)
 
 }
 
@@ -35,53 +93,6 @@ $(function () {
 
     var socket = io();
 
-    // elements
-    const $createRoomButton = $('#createRoomButton')
-    const $joinRoomForm = $('#joinRoomForm')
-    const $chatRoom = $('#chatRoom')
-    const $chatRoomKey = $('#chatRoomKey')
-    const $messageForm = $('#messageForm')
-    const $chatWindow = $('#chatWindow')
-
-
-
-    // handlers
-    $joinRoomForm.on('submit', { socket : socket},  joinRoomHandler)
-    $createRoomButton.on('click', { socket : socket},  createRoomHandler)
-    $messageForm.on('submit', { socket: socket },  sendMessageHandler)
-
-    // socket
-    socket.on("sendRoomId", key => {
-        console.log(key)
-
-        $('#roomKeyInput').val(key)
-
-    })
-
-    socket.on("sendRoom", room => {
-        
-        // show chat room gui
-        $joinRoomForm.hide()
-        $chatRoom.show()
-        $chatRoomKey.html(`Room: ${room.id}`)
-
-        // store room and username
-        localStorage.setItem('roomKey', room.id)
-        localStorage.setItem('username', $('#usernameInput').val())
-    })
-
-
-    socket.on("roomNotFound", key => {
-        alert(`Room ${key} not found`)
-    })
-
-    socket.on('newMessage', (message, username) => {
-        
-
-        $chatWindow.append(`<span>${username}: ${message}</span><br>`)
-
-    })
-
-
-
+    registerDOMHandlers(socket)
+    registerSocketHandlers(socket)
 })
