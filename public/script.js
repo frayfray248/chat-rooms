@@ -51,23 +51,23 @@ $(function () {
     $messageForm.on('submit', { socket: socket },  sendMessageHandler)
 
     // socket
-    socket.on("sendKey", key => {
+    socket.on("sendRoomId", key => {
         console.log(key)
 
         $('#roomKeyInput').val(key)
 
     })
 
-    socket.on("sendRoom", (key, username) => {
+    socket.on("sendRoom", room => {
         
         // show chat room gui
         $joinRoomForm.hide()
         $chatRoom.show()
-        $chatRoomKey.html(`Room: ${key}`)
+        $chatRoomKey.html(`Room: ${room.id}`)
 
         // store room and username
-        localStorage.setItem('roomKey', key)
-        localStorage.setItem('username', username)
+        localStorage.setItem('roomKey', room.id)
+        localStorage.setItem('username', $('#usernameInput').val())
     })
 
 
