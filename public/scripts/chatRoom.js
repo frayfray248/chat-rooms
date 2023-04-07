@@ -33,12 +33,22 @@ const chatRoom = (() => {
         chatRoomUsersList.empty()
 
         for (const user of users) {
-            chatRoomUsersList.append(`
+
+            const isClient = user === localStorage.getItem('username', user)
+
+            const userListItem = `
             <li class="user-item" >
                 <span class="users-list-status-light active"></span>
-                <span class="users-list-user">${user}</span>
+                <span class="users-list-user">${user} ${isClient ? "(You)" : ""}</span>
             </li>
-            `)
+            `
+
+            if (isClient) {
+                chatRoomUsersList.prepend(userListItem)
+            }
+            else {
+                chatRoomUsersList.append(userListItem)
+            }
         }
 
     }
