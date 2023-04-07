@@ -33,9 +33,16 @@ const registerSocketHandlers = (socket) => {
 
     }
 
+    const updateUsers = (users) => {
+
+        chatRoom.renderUsersList(users)
+
+    }
+
     socket.on("sendRoomId", sendRoomId)
     socket.on("sendRoom", sendRoom)
     socket.on("roomNotFound", roomNotFound)
     socket.on("newMessage", newMessage)
+    socket.on("updateUsers", updateUsers)
 
 }

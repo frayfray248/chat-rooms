@@ -9,7 +9,8 @@ const createRoom = () => {
 
     rooms.push({
         id: newRoomId,
-        messages: []
+        messages: [],
+        users: []
     })
 
     return newRoomId
@@ -19,6 +20,15 @@ const createRoom = () => {
 const getRoom = (roomId) => {
 
     return rooms.find(room => room.id === roomId)
+
+}
+
+// add user to room
+const addUser = (username, roomId) => {
+    
+    const room = getRoom(roomId)
+
+    room.users.push(username)
 
 }
 
@@ -46,5 +56,6 @@ module.exports = {
     createRoom : createRoom,
     getRoom : getRoom,
     addMessage : addMessage,
-    getMessages : getMessages
+    getMessages : getMessages,
+    addUser : addUser
 }

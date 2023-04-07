@@ -6,5 +6,6 @@ const selectors = {
     chatRoomId : '#chatRoomId',
     chatWindow : '#chatWindow',
     roomIdInput : '#roomIdInput',
-    chatRoomUsernameTitle : '#chatRoomUsernameTitle'
+    chatRoomUsernameTitle : '#chatRoomUsernameTitle',
+    chatRoomUsersList : '#chatRoomUsersList'
 }

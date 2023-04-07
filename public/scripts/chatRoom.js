@@ -16,7 +16,25 @@ const chatRoom = (() => {
 
     }
 
+    const renderUsersList = (users) => {
+
+        const chatRoomUsersList = $(selectors.chatRoomUsersList)
+        chatRoomUsersList.empty()
+
+        for (const user of users) {
+            chatRoomUsersList.append(`
+            <li class="user-item" >
+                <span class="users-list-status-light active"></span>
+                <span class="users-list-user">${user}</span>
+            </li>
+            `)
+        }
+
+    }
+
     const setUp = (room, username) => {
+
+        renderUsersList(room.users)
 
         $(selectors.chatRoomUsernameTitle).html(`Room: ${room.id}`)
 
@@ -32,7 +50,8 @@ const chatRoom = (() => {
         appendMessage : appendMessage,
         show : show,
         setUp : setUp,
-        hide : hide
+        hide : hide,
+        renderUsersList : renderUsersList
     }
 
 })()

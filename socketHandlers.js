@@ -12,13 +12,17 @@ module.exports = (io, socket) => {
     }
 
     // join a socket to a room
-    const joinRoom = (roomId) => {
+    const joinRoom = (roomId, username) => {
 
         const room = chatRoom.getRoom(roomId)
+        console.log(room)
+        
 
         if (room) {
             socket.join(roomId)
+            chatRoom.addUser(username, room.id)
             socket.emit("sendRoom", room)
+            io.to(room.id).emit("updateUsers", room.users)
         }
         else {
             socket.emit('roomNotFound', roomId)
