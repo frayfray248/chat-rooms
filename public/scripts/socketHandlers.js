@@ -27,9 +27,9 @@ const registerSocketHandlers = (socket) => {
 
     }
 
-    const newMessage = (text, username) => {
+    const updateMessages = (messages) => {
 
-        chatRoom.appendMessage(text, username)
+        chatRoom.renderMessages(messages)
 
     }
 
@@ -42,7 +42,7 @@ const registerSocketHandlers = (socket) => {
     socket.on("sendRoomId", sendRoomId)
     socket.on("sendRoom", sendRoom)
     socket.on("roomNotFound", roomNotFound)
-    socket.on("newMessage", newMessage)
+    socket.on("updateMessages", updateMessages)
     socket.on("updateUsers", updateUsers)
 
 }

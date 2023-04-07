@@ -4,7 +4,6 @@ const chatRoom = (() => {
 
         const chatWindowMessages = $(selectors.chatWindowMessages)
 
-
         chatWindowMessages.append(
         `
         <li class="chatroom-message">
@@ -25,6 +24,17 @@ const chatRoom = (() => {
 
         $(selectors.chatRoom).css("display", "none")
 
+    }
+
+    const renderMessages = (messages) => {
+
+        const chatWindowMessages = $(selectors.chatWindowMessages)
+
+        chatWindowMessages.empty()
+
+        for (const message of messages) {
+            appendMessage(message.text, message.username)
+        }
     }
 
     const renderUsersList = (users) => {
@@ -61,9 +71,7 @@ const chatRoom = (() => {
 
         $(selectors.chatRoomId).html(`Room: ${room.id}`)
 
-        for (const message of room.messages) {
-            appendMessage(message.text, message.username)
-        }
+        renderMessages(room.messages)
 
     }
 
@@ -72,7 +80,8 @@ const chatRoom = (() => {
         show : show,
         setUp : setUp,
         hide : hide,
-        renderUsersList : renderUsersList
+        renderUsersList : renderUsersList,
+        renderMessages: renderMessages
     }
 
 })()

@@ -34,10 +34,10 @@ module.exports = (io, socket) => {
     const sendMessage = (message, username, roomId) => {
 
         chatRoom.addMessage(message, username, roomId)
+        
+        const room = chatRoom.getRoom(roomId)
 
-        io.to(roomId).emit('newMessage', message, username)
-
-        // should return all messages or make an update messages handler
+        io.to(roomId).emit('updateMessages', room.messages)
 
     }
 
