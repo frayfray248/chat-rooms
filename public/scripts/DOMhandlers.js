@@ -29,6 +29,7 @@ const registerDOMHandlers = (socket) => {
         const message = $('#messageInput').val()
 
         socket.emit('sendMessage', message, username, key)
+        $('#messageInput').val("")
 
     }
 

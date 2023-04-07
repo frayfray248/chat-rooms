@@ -6,11 +6,19 @@ const chatRoom = (() => {
 
     const show = () => {
 
-        $(selectors.chatRoom).show()
+        $(selectors.chatRoom).css("display", "flex")
 
     }
 
-    const setUp = (room) => {
+    const hide = () => {
+
+        $(selectors.chatRoom).css("display", "none")
+
+    }
+
+    const setUp = (room, username) => {
+
+        $(selectors.chatRoomUsernameTitle).html(`Room: ${room.id}`)
 
         $(selectors.chatRoomId).html(`Room: ${room.id}`)
 
@@ -23,7 +31,8 @@ const chatRoom = (() => {
     return {
         appendMessage : appendMessage,
         show : show,
-        setUp : setUp
+        setUp : setUp,
+        hide : hide
     }
 
 })()

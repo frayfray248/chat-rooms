@@ -8,14 +8,16 @@ const registerSocketHandlers = (socket) => {
 
     const sendRoom = (room) => {
 
-        // show chat room gui
-        $(selectors.joinRoomForm).hide()
-        chatRoom.setUp(room)
-        chatRoom.show()
+        const username = $('#usernameInput').val()
 
         // store room and username
         localStorage.setItem('roomKey', room.id)
-        localStorage.setItem('username', $('#usernameInput').val())
+        localStorage.setItem('username', username)
+
+        // show chat room gui
+        $(selectors.joinRoomForm).hide()
+        chatRoom.setUp(room, username)
+        chatRoom.show()
 
     }
 

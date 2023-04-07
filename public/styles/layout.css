@@ -1,0 +1,36 @@
+/* main container */
+
+.main-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin: 0px auto;
+    justify-content: center;
+    align-items: center;
+}
+
+/* flex classes */
+
+.d-flex {
+    display: flex;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.justify-end {
+    justify-content: end;
+}
+
+.gap-5 {
+    gap: 5px;
+}
+
+.column-1 {
+    flex-grow: 1;
+}
+
+.column-3 {
+    flex-grow: 3;
+}

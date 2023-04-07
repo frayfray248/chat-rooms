@@ -3,31 +3,71 @@
 
 <head>
     <title>Chat Rooms</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/menu.css">
+    <link rel="stylesheet" href="styles/chatroom.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <form id="joinRoomForm">
-        <button id="createRoomButton" type="button">Create Room</button>
-        <label for="roomIdInput">Room Key:</label>
-        <input id="roomIdInput" type="text" required>
-        <label for="usernameInput" required>Username:</label>
-        <input id="usernameInput" type="text" required>
-        <input type="submit" value="Join">
-    </form>
+    <div class="main-container">
 
-    <div id="chatRoom" hidden>
-        <h1 id="chatRoomId">Room: ??</h1>
-        <form id="messageForm">
-            <input id="messageInput" type="text">
-            <input type="submit">
+        <!-- Main Menu -->
+        <form class="menu-container border" id="joinRoomForm">
+
+            <h1>Chat Rooms</h1>
+
+            <button id="createRoomButton" class="button" type="button">Create Room</button>
+
+            <div class="d-flex gap-5 align-center justify-end">
+                <label for="roomIdInput" class="label">Room ID:</label>
+                <input id="roomIdInput" class="input" type="text" placeholder="Enter a room ID" required>
+            </div>
+
+            <div class="d-flex gap-5 align-center justify-end">
+                <label for="usernameInput" class="label" required>Username:</label>
+                <input id="usernameInput" class="input" placeholder="Enter a username" type="text" required>
+            </div>
+
+            <input type="submit" class="button" value="Join">
+
         </form>
-        <div id="chatWindow">
+
+        <!-- Chat Room -->
+        <div id="chatRoom" class="chatroom border">
+
+            <!-- Side Menu -->
+            <div class="column-1 side-menu">
+            </div>
+
+            <!-- Chat -->
+            <div class="column-3 chatroom-chat-container">
+                
+                <!-- Chat Title -->
+                <div class="chatroom-title">
+                    <h1 id="chatRoomUsernameTitle"></h1>
+                </div>
+
+                <!-- Chat Window -->
+                <div id="chatWindow" class="chatroom-chat-window">
+
+                </div>
+
+                <!-- Chat Message Form-->
+                <form id="messageForm" class="chatroom-message-form">
+                    <textarea id="messageInput" class="column-3" placeholder="Enter a message..."></textarea>
+                    <input type="submit" class="column-1">
+                </form>
+
+            </div>
 
         </div>
     </div>
-    
+
+
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/scripts/chatRoom.js"></script>
     <script src="/scripts/selectors.js"></script>

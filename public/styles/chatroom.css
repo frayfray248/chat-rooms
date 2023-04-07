@@ -1,0 +1,65 @@
+/* main container */
+
+.chatroom {
+    display: none;
+    width: 80%;
+    height: 80%;
+}
+
+/* container for title, window and message form */
+
+.chatroom-chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* title */
+
+.chatroom-title {
+    border-bottom: 2px solid var(--border-color);
+    padding: 0 15px;
+}
+
+/* window */
+
+.chatroom-chat-window {
+    flex: 1;
+    overflow: auto;
+    padding: 10px;
+}
+
+.chatroom-message-form {
+    display: flex;
+    width: 100%;
+    align-self: flex-end;
+    border-top: 2px solid var(--border-color);
+    height: 75px;
+}
+
+/* message form */
+
+.chatroom-message-form textarea {
+    flex-grow: 3;
+    font-size: large;
+    background-color: var(--tert-bg-color);
+    border: none;
+    resize: none;
+    color: white;
+}
+
+.chatroom-message-form textarea {
+    outline: none;
+}
+
+.chatroom-message-form input[type="submit"]{
+    flex-grow: 1;
+    font-size: large;
+    border: none;
+    background: none;
+    color: var(--text-color);
+}
+
+.chatroom-message-form textarea::placeholder {
+    color: var(--placeholder-color)
+}
