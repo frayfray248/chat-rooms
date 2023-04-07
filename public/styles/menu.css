@@ -1,0 +1,17 @@
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--sec-bg-color);
+    padding: 50px;
+    gap: 20px;
+    border-radius: 10px;
+}
+
+
+.side-menu {
+    background-color: var(--sec-bg-color);
+    border-right: 2px solid var(--border-color);
+}
+
+
+

@@ -1,0 +1,77 @@
+/* vars */
+
+:root {
+    --main-bg-color: #000b1e;
+    --sec-bg-color: #091833;
+    --tert-bg-color: #173875;
+    --text-color: #0cccd6;
+    --border-color: #0cccd6;
+    --placeholder-color: #5f8385;
+}
+
+/* html and body */
+
+html, body {
+    height: 100%;
+    margin: 0px;
+    font-family: Arial, sans-serif;
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
+}
+
+/* borders and backgrounds */
+
+.border {
+    border: 2px solid var(--border-color);
+}
+
+.bg-main {
+    background-color: var(--main-bg-color);
+}
+
+.bg-menu {
+    background-color: var(--sec-bg-color);
+}
+
+.bg-input {
+    background-color: var(--tert-bg-color);
+}
+
+/* basic components */
+
+.button {
+    background: none;
+    border: 2px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 1.5em;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.button:hover {
+    background-color: var(--tert-bg-color);
+}
+
+.input {
+    background-color: var(--tert-bg-color);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    color: white;
+    font-size: large;
+    padding: 4px;
+}
+
+.input::placeholder {
+    color: var(--placeholder-color)
+}
+
+.input:focus {
+    outline: none;
+}
+
+.label {
+    font-size: large;
+}
+
+
+
