@@ -1,7 +1,18 @@
 const chatRoom = (() => {
 
     const appendMessage = (text, username) => {
-        $(selectors.chatWindow).append(`<span>${username}: ${text}</span><br>`)
+
+        const chatWindowMessages = $(selectors.chatWindowMessages)
+
+
+        chatWindowMessages.append(
+        `
+        <li class="chatroom-message">
+            <div>${username}</div>
+            <p class="chatroom-message-text">${text}</p>
+        </li>
+        `)
+
     }
 
     const show = () => {
