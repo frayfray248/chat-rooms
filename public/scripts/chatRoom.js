@@ -1,5 +1,7 @@
 const chatRoom = (() => {
 
+    const updateTypingHandlers = new Map()
+
     const appendMessage = (text, username) => {
 
         const chatWindowMessages = $(selectors.chatWindowMessages)
@@ -61,7 +63,33 @@ const chatRoom = (() => {
                 chatRoomUsersList.append(userListItem)
             }
 
+            // update typing handler closure for user
+            const updateTypingHandler = () => {
 
+                let timeout
+
+                return (username) => {
+
+                    if (timeout) {
+
+                        clearTimeout(timeout)
+
+                    }
+
+                    $(selectors.userTyping(username)).show()
+                    console.log(`${username} is typing`)
+
+                    timeout = setTimeout(() => {
+
+                        $(selectors.userTyping(username)).hide()
+                        timeout = null;
+
+                    }, 1500)
+
+                }
+            }
+
+            updateTypingHandlers.set(user, updateTypingHandler())
 
         }
 
@@ -80,28 +108,12 @@ const chatRoom = (() => {
     }
 
 
-    const updateTyping = () => {
+    const updateTyping = (username) => {
 
-        let timeout
+        const handler = updateTypingHandlers.get(username)
 
-        return (username) => {
+        handler(username)
 
-            if (timeout) {
-
-                clearTimeout(timeout)
-
-            }
-
-            $(selectors.userTyping(username)).show()
-
-            timeout = setTimeout(() => {
-
-                $(selectors.userTyping(username)).hide()
-                timeout = null;
-
-            }, 1500)
-
-        }
     }
 
 
@@ -112,7 +124,7 @@ const chatRoom = (() => {
         hide: hide,
         renderUsersList: renderUsersList,
         renderMessages: renderMessages,
-        updateTyping: updateTyping()
+        updateTyping: updateTyping
     }
 
 })()

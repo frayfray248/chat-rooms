@@ -14,8 +14,11 @@ const registerSocketHandlers = (socket) => {
         localStorage.setItem('roomKey', room.id)
         localStorage.setItem('username', username)
 
-        // show chat room gui
+        // clear and hide join room form
+        $(selectors.joinRoomForm).find('input[type="text"').val('')
         $(selectors.joinRoomForm).hide()
+
+        // show chat room gui
         chatRoom.setUp(room, username)
         chatRoom.show()
 
