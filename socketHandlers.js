@@ -41,6 +41,12 @@ module.exports = (io, socket) => {
 
     }
 
+    const typing = (username, roomId) => {
+        
+        io.to(roomId).emit("typing", username)
+
+    }
+
     // get a room
     const getMessages = (roomId) => {
 
@@ -52,5 +58,6 @@ module.exports = (io, socket) => {
     socket.on("joinRoom", joinRoom)
     socket.on("sendMessage", sendMessage)
     socket.on("getMessage", getMessages)
+    socket.on('typing', typing)
 
 }

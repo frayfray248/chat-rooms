@@ -39,10 +39,17 @@ const registerSocketHandlers = (socket) => {
 
     }
 
+    const typing = (username) => {
+
+        chatRoom.updateTyping(username)
+
+    }
+
     socket.on("sendRoomId", sendRoomId)
     socket.on("sendRoom", sendRoom)
     socket.on("roomNotFound", roomNotFound)
     socket.on("updateMessages", updateMessages)
     socket.on("updateUsers", updateUsers)
+    socket.on('typing', typing)
 
 }

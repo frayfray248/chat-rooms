@@ -5,7 +5,7 @@ const chatRoom = (() => {
         const chatWindowMessages = $(selectors.chatWindowMessages)
 
         chatWindowMessages.append(
-        `
+            `
         <li class="chatroom-message">
             <div>${username}</div>
             <p class="chatroom-message-text">${text}</p>
@@ -50,6 +50,7 @@ const chatRoom = (() => {
             <li class="user-item" >
                 <span class="users-list-status-light active"></span>
                 <span class="users-list-user">${user} ${isClient ? "(You)" : ""}</span>
+                <span id="${user}Typing" style="display: none;">typing...</span>
             </li>
             `
 
@@ -59,6 +60,9 @@ const chatRoom = (() => {
             else {
                 chatRoomUsersList.append(userListItem)
             }
+
+
+
         }
 
     }
@@ -75,13 +79,40 @@ const chatRoom = (() => {
 
     }
 
+
+    const updateTyping = () => {
+
+        let timeout
+
+        return (username) => {
+
+            if (timeout) {
+
+                clearTimeout(timeout)
+
+            }
+
+            $(selectors.userTyping(username)).show()
+
+            timeout = setTimeout(() => {
+
+                $(selectors.userTyping(username)).hide()
+                timeout = null;
+
+            }, 1500)
+
+        }
+    }
+
+
     return {
-        appendMessage : appendMessage,
-        show : show,
-        setUp : setUp,
-        hide : hide,
-        renderUsersList : renderUsersList,
-        renderMessages: renderMessages
+        appendMessage: appendMessage,
+        show: show,
+        setUp: setUp,
+        hide: hide,
+        renderUsersList: renderUsersList,
+        renderMessages: renderMessages,
+        updateTyping: updateTyping()
     }
 
 })()

@@ -8,5 +8,7 @@ const selectors = {
     roomIdInput : '#roomIdInput',
     chatRoomUsernameTitle : '#chatRoomUsernameTitle',
     chatRoomUsersList : '#chatRoomUsersList',
-    chatWindowMessages : '#chatWindowMessages'
+    chatWindowMessages : '#chatWindowMessages',
+    messageInput : "#messageInput",
+    userTyping : (username) => `#${username}Typing`
 }
