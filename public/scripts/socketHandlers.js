@@ -21,6 +21,13 @@ const registerSocketHandlers = (socket) => {
 
     }
 
+    const leaveRoom = () => {
+
+        chatRoom.hide()
+        $(selectors.joinRoomForm).show()
+
+    }
+
     const roomNotFound = (roomId) => {
 
         alert(`Room ${roomId} not found`)
@@ -51,5 +58,6 @@ const registerSocketHandlers = (socket) => {
     socket.on("updateMessages", updateMessages)
     socket.on("updateUsers", updateUsers)
     socket.on('typing', typing)
+    socket.on("leaveRoom", leaveRoom)
 
 }

@@ -19,6 +19,12 @@ const registerDOMHandlers = (socket) => {
         socket.emit('joinRoom', key, username)
     }
 
+    const leaveRoomHandler = (event) => {
+       
+        socket.emit('leaveRoom', localStorage.getItem('username'), localStorage.getItem('roomKey'))
+
+    }
+
     const sendMessageHandler = (event) => {
         event.preventDefault()
 
@@ -74,5 +80,6 @@ const registerDOMHandlers = (socket) => {
     $(selectors.createRoomButton).on('click', { socket: socket }, createRoomHandler)
     $(selectors.messageForm).on('submit', { socket: socket }, sendMessageHandler)
     $(selectors.messageInput).on('input', typingHandler)
+    $(selectors.chatRoomLeaveButton).on('click', { socket : socket }, leaveRoomHandler)
 
 }

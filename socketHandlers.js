@@ -15,8 +15,6 @@ module.exports = (io, socket) => {
     const joinRoom = (roomId, username) => {
 
         const room = chatRoom.getRoom(roomId)
-        console.log(room)
-        
 
         if (room) {
             socket.join(roomId)
@@ -27,6 +25,17 @@ module.exports = (io, socket) => {
         else {
             socket.emit('roomNotFound', roomId)
         }
+
+    }
+
+    // disconnect a socket from a room
+    const leaveRoom = (username, roomId) => {
+
+        const room = chatRoom.getRoom(roomId)
+        chatRoom.removeUser(username, room.id)
+        socket.leave(room.id)
+        socket.emit('leaveRoom')
+        io.to(room.id).emit("updateUsers", room.users)
 
     }
 
@@ -59,5 +68,6 @@ module.exports = (io, socket) => {
     socket.on("sendMessage", sendMessage)
     socket.on("getMessage", getMessages)
     socket.on('typing', typing)
+    socket.on("leaveRoom", leaveRoom)
 
 }

@@ -54,8 +54,17 @@
 /* title */
 
 .chatroom-title {
+    display: flex;
+    justify-content: space-between;
     border-bottom: 2px solid var(--border-color);
-    padding: 0 15px;
+}
+
+.chatroom-title h1 {
+    padding-left: 15px;
+}
+
+.button-chatroom {
+    outline: 2px solid var(--border-color);
 }
 
 /* window */

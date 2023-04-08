@@ -32,6 +32,17 @@ const addUser = (username, roomId) => {
 
 }
 
+// remove a user from a room
+const removeUser = (username, roomId) => {
+    
+    const room = getRoom(roomId)
+
+    console.log(room)
+
+    room.users.splice(room.users.indexOf(username), 1)
+
+}
+
 // add a new message to a room
 const addMessage = (message, username, roomId) => {
 
@@ -57,5 +68,6 @@ module.exports = {
     getRoom : getRoom,
     addMessage : addMessage,
     getMessages : getMessages,
-    addUser : addUser
+    addUser : addUser,
+    removeUser : removeUser
 }

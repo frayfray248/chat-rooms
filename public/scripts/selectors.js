@@ -10,5 +10,6 @@ const selectors = {
     chatRoomUsersList : '#chatRoomUsersList',
     chatWindowMessages : '#chatWindowMessages',
     messageInput : "#messageInput",
-    userTyping : (username) => `#${username}Typing`
+    userTyping : (username) => `#${username}Typing`,
+    chatRoomLeaveButton : '#chatRoomLeaveButton'
 }
