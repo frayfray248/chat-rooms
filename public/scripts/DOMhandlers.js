@@ -20,14 +20,14 @@ const registerDOMHandlers = (socket) => {
     }
 
     const leaveRoomHandler = (event) => {
-       
+
         socket.emit('leaveRoom', localStorage.getItem('username'), localStorage.getItem('roomKey'))
+        localStorage.removeItem('username')
+        localStorage.removeItem('roomkey')
 
     }
 
-    const sendMessageHandler = (event) => {
-        event.preventDefault()
-
+    const sendMessage = (event) => {
         const message = $('#messageInput').val()
 
         if (!message) return
@@ -39,6 +39,18 @@ const registerDOMHandlers = (socket) => {
         socket.emit('sendMessage', message, username, key)
         $('#messageInput').val("")
 
+    }
+
+    const sendMessageHandler = (event) => {
+        event.preventDefault()
+        sendMessage(event)
+    }
+
+    const enterKeyPressedHandler = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault()
+            sendMessage(event)
+        }
     }
 
     const throttle = (cb, delay = 1000) => {
@@ -80,6 +92,7 @@ const registerDOMHandlers = (socket) => {
     $(selectors.createRoomButton).on('click', { socket: socket }, createRoomHandler)
     $(selectors.messageForm).on('submit', { socket: socket }, sendMessageHandler)
     $(selectors.messageInput).on('input', typingHandler)
-    $(selectors.chatRoomLeaveButton).on('click', { socket : socket }, leaveRoomHandler)
+    $(selectors.chatRoomLeaveButton).on('click', { socket: socket }, leaveRoomHandler)
+    $(selectors.messageInput).on("keydown", { socket: socket }, enterKeyPressedHandler)
 
 }
