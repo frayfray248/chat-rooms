@@ -23,12 +23,24 @@ const getRoom = (roomId) => {
 
 }
 
+// get a user in a room
+const getUser = (username, roomId) => {
+
+    const room = getRoom(roomId)
+    const user = room.users.find(user => user.username === username)
+    return user
+}
+
+
 // add user to room
-const addUser = (username, roomId) => {
+const addUser = (username, roomId, status = "active") => {
     
     const room = getRoom(roomId)
 
-    room.users.push(username)
+    room.users.push({
+        username : username,
+        status: status
+    })
 
 }
 
@@ -37,9 +49,9 @@ const removeUser = (username, roomId) => {
     
     const room = getRoom(roomId)
 
-    console.log(room)
+    const user = getUser(username, roomId)
 
-    room.users.splice(room.users.indexOf(username), 1)
+    room.users.splice(room.users.indexOf(user), 1)
 
 }
 
@@ -63,11 +75,21 @@ const getMessages = (roomId) => {
     
 }
 
+// set the status of a user
+const setUserStatus = (username, status, roomId) => {
+
+    const user = getUser(username, roomId)
+
+    user.status = status
+
+}
+
 module.exports = {
     createRoom : createRoom,
     getRoom : getRoom,
     addMessage : addMessage,
     getMessages : getMessages,
     addUser : addUser,
-    removeUser : removeUser
+    removeUser : removeUser,
+    setUserStatus : setUserStatus
 }

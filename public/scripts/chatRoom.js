@@ -1,6 +1,11 @@
 const chatRoom = (() => {
 
     const updateTypingHandlers = new Map()
+    const userStatus = {
+        active : "active",
+        idle : "idle",
+        away : "away"
+    }
 
     const appendMessage = (text, username) => {
 
@@ -46,13 +51,13 @@ const chatRoom = (() => {
 
         for (const user of users) {
 
-            const isClient = user === localStorage.getItem('username', user)
+            const isClient = user.username === localStorage.getItem('username')
 
             const userListItem = `
             <li class="user-item" >
-                <span class="users-list-status-light active"></span>
-                <span class="users-list-user">${user} ${isClient ? "(You)" : ""}</span>
-                <span id="${user}Typing" style="display: none;">typing...</span>
+                <span id="${user.username}Status" class="users-list-status-light ${user.status}"></span>
+                <span class="users-list-user">${user.username} ${isClient ? "(You)" : ""}</span>
+                <span id="${user.username}Typing" style="display: none;">typing...</span>
             </li>
             `
 
@@ -89,7 +94,7 @@ const chatRoom = (() => {
                 }
             }
 
-            updateTypingHandlers.set(user, updateTypingHandler())
+            updateTypingHandlers.set(user.username, updateTypingHandler())
 
         }
 
@@ -116,6 +121,29 @@ const chatRoom = (() => {
 
     }
 
+    const updateUserStatus = (username, status) => {
+
+        console.log(`${username} is now ${status}`)
+
+
+        if (status === userStatus.active) {
+
+            $(selectors.userStatus(username)).attr('class', 'users-list-status-light active')
+            
+        }
+        else if (status === userStatus.idle) {
+
+            $(selectors.userStatus(username)).attr('class', 'users-list-status-light idle')
+
+        }
+        else if (status === userStatus.away) {
+
+            $(selectors.userStatus(username)).attr('class', 'users-list-status-light away')
+
+        }
+
+    }
+
 
     return {
         appendMessage: appendMessage,
@@ -124,7 +152,8 @@ const chatRoom = (() => {
         hide: hide,
         renderUsersList: renderUsersList,
         renderMessages: renderMessages,
-        updateTyping: updateTyping
+        updateTyping: updateTyping,
+        updateUserStatus : updateUserStatus
     }
 
 })()

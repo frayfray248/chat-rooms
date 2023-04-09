@@ -20,11 +20,14 @@ const registerDOMHandlers = (socket) => {
     }
 
     const leaveRoomHandler = (event) => {
+        const username = localStorage.getItem('username')
+        const roomId = localStorage.getItem('roomKey')
 
-        socket.emit('leaveRoom', localStorage.getItem('username'), localStorage.getItem('roomKey'))
         localStorage.removeItem('username')
-        localStorage.removeItem('roomkey')
+        localStorage.removeItem('roomKey')
+        resetIdleTimer(event.data.socket)
 
+        socket.emit('leaveRoom', username, roomId)
     }
 
     const sendMessage = (event) => {
@@ -84,9 +87,57 @@ const registerDOMHandlers = (socket) => {
         socket.emit("typing", localStorage.getItem('username'), localStorage.getItem('roomKey'))
     })
 
+    const updateActivityStatus = throttle(() => {
+
+        if (localStorage.getItem('username') && localStorage.getItem('roomKey')) {
+            socket.emit('updateStatus', localStorage.getItem("username"), localStorage.getItem("roomKey"), "active")
+        }
+        
+    })
+
     const typingHandler = (event) => {
         updateTypingStatus()
     }
+
+
+    const resetIdleTimer = (() => {
+
+
+
+        let timeout
+
+        return (socket) => {
+
+            clearTimeout(timeout)
+
+            if (!localStorage.getItem('username') || !localStorage.getItem('roomKey')) {
+                console.log('not in a chatroom')
+                return
+            }
+
+            timeout = setTimeout(() => {
+
+                if (localStorage.getItem('username') && localStorage.getItem('roomKey')) {
+
+                    console.log(`Emitting an update status: ${localStorage.getItem('username')} ${localStorage.getItem('roomKey')}`)
+
+                    socket.emit('updateStatus', localStorage.getItem("username"), localStorage.getItem("roomKey"), "idle")
+
+                }
+
+            }, 5000)
+        }
+    })()
+
+    const resetIdleTimerHandler = (event) => {
+
+        resetIdleTimer(event.data.socket)
+        updateActivityStatus()
+        
+    }
+
+    localStorage.removeItem('username')
+    localStorage.removeItem('roomKey')
 
     $(selectors.joinRoomForm).on('submit', { socket: socket }, joinRoomHandler)
     $(selectors.createRoomButton).on('click', { socket: socket }, createRoomHandler)
@@ -95,4 +146,13 @@ const registerDOMHandlers = (socket) => {
     $(selectors.chatRoomLeaveButton).on('click', { socket: socket }, leaveRoomHandler)
     $(selectors.messageInput).on("keydown", { socket: socket }, enterKeyPressedHandler)
 
+    $(document).on("mousemove", { socket: socket }, resetIdleTimerHandler)
+    $(document).on("keydown", { socket: socket }, resetIdleTimerHandler)
+    $(document).on("touchstart", { socket: socket }, resetIdleTimerHandler)
+
+    
+
+    resetIdleTimer(socket)
+
 }
+

@@ -56,6 +56,20 @@ module.exports = (io, socket) => {
 
     }
 
+    const updateStatus = (username, roomId, status) => {
+
+        console.log(username)
+        console.log(roomId)
+        console.log(status)
+        const room = chatRoom.getRoom(roomId)
+        console.log(room)
+
+        chatRoom.setUserStatus(username, status, roomId)
+        io.to(room.id).emit("updateUsers", room.users)
+        //io.to(roomId).emit("updateUserStatus", username, status)
+
+    }
+
     // get a room
     const getMessages = (roomId) => {
 
@@ -69,5 +83,6 @@ module.exports = (io, socket) => {
     socket.on("getMessage", getMessages)
     socket.on('typing', typing)
     socket.on("leaveRoom", leaveRoom)
+    socket.on("updateStatus", updateStatus)
 
 }

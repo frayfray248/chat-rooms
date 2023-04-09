@@ -55,6 +55,12 @@ const registerSocketHandlers = (socket) => {
 
     }
 
+    const updateUserStatus = (username, status) => {
+
+        chatRoom.updateUserStatus(username, status)
+
+    }
+
     socket.on("sendRoomId", sendRoomId)
     socket.on("sendRoom", sendRoom)
     socket.on("roomNotFound", roomNotFound)
@@ -62,5 +68,6 @@ const registerSocketHandlers = (socket) => {
     socket.on("updateUsers", updateUsers)
     socket.on('typing', typing)
     socket.on("leaveRoom", leaveRoom)
+    socket.on("updateUserStatus", updateUserStatus)
 
 }
