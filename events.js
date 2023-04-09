@@ -16,3 +16,4 @@ exports.USER_TYPING = "USER_TYPING"
 
 // server error events
 exports.ROOM_NOT_FOUND = "ROOM_NOT_FOUND"
+exports.ERROR = "ERROR"

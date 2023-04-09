@@ -5,7 +5,6 @@ const { Server } = require('socket.io')
 
 // socket handlers
 const registerSocketHandlers = require('./socketHandlers')
-
 // constants
 const EVENTS = require('./events.js')
 

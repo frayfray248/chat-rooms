@@ -2,7 +2,7 @@ const registerDOMHandlers = (socket, EVENTS) => {
 
     const createRoomHandler = (event) => {
         event.preventDefault()
-        
+
         const socket = event.data.socket
 
         socket.emit(EVENTS.CREATE_ROOM)

@@ -61,6 +61,12 @@ const registerSocketHandlers = (socket, EVENTS) => {
 
     }
 
+    const handleError = (message) => {
+
+        alert(message)
+
+    }
+
     socket.on(EVENTS.SEND_ROOM_ID, sendRoomId)
     socket.on(EVENTS.SEND_ROOM, sendRoom)
     socket.on(EVENTS.ROOM_NOT_FOUND, roomNotFound)
@@ -69,5 +75,6 @@ const registerSocketHandlers = (socket, EVENTS) => {
     socket.on(EVENTS.USER_TYPING, typing)
     socket.on(EVENTS.LEAVE_ROOM, leaveRoom)
     socket.on(EVENTS.UPDATE_STATUS, updateUserStatus)
+    socket.on(EVENTS.ERROR, handleError)
 
 }

@@ -78,12 +78,29 @@ module.exports = (io, socket) => {
 
     }
 
-    socket.on(EVENTS.CREATE_ROOM, createRoom)
-    socket.on(EVENTS.JOIN_ROOM, joinRoom)
-    socket.on(EVENTS.SEND_MESSAGE, sendMessage)
-    socket.on(EVENTS.GET_MESSAGES, getMessages)
-    socket.on(EVENTS.TYPING, typing)
-    socket.on(EVENTS.LEAVE_ROOM, leaveRoom)
-    socket.on(EVENTS.UPDATE_STATUS, updateStatus)
+    // error wrapper
+    const errorWrapper = (socketHandler) => {
+
+        return (...args) => {
+            try {
+                socketHandler(...args)
+    
+            } catch (error) {
+    
+                console.log(error)
+                socket.emit(EVENTS.ERROR, "Server error")
+    
+            }
+        }
+    }
+
+
+    socket.on(EVENTS.CREATE_ROOM, errorWrapper(createRoom))
+    socket.on(EVENTS.JOIN_ROOM, errorWrapper(joinRoom))
+    socket.on(EVENTS.SEND_MESSAGE, errorWrapper(sendMessage))
+    socket.on(EVENTS.GET_MESSAGES, errorWrapper(getMessages))
+    socket.on(EVENTS.TYPING, errorWrapper(typing))
+    socket.on(EVENTS.LEAVE_ROOM, errorWrapper(leaveRoom))
+    socket.on(EVENTS.UPDATE_STATUS, errorWrapper(updateStatus))
 
 }
