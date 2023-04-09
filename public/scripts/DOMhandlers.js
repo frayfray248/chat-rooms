@@ -1,11 +1,11 @@
-const registerDOMHandlers = (socket) => {
+const registerDOMHandlers = (socket, EVENTS) => {
 
     const createRoomHandler = (event) => {
         event.preventDefault()
-
+        
         const socket = event.data.socket
 
-        socket.emit('createRoom')
+        socket.emit(EVENTS.CREATE_ROOM)
 
     }
 
@@ -16,7 +16,7 @@ const registerDOMHandlers = (socket) => {
         const key = $('#roomIdInput').val()
         const username = $('#usernameInput').val()
 
-        socket.emit('joinRoom', key, username)
+        socket.emit(EVENTS.JOIN_ROOM, key, username)
     }
 
     const leaveRoomHandler = (event) => {
@@ -27,7 +27,7 @@ const registerDOMHandlers = (socket) => {
         localStorage.removeItem('roomKey')
         resetIdleTimer(event.data.socket)
 
-        socket.emit('leaveRoom', username, roomId)
+        socket.emit(EVENTS.LEAVE_ROOM, username, roomId)
     }
 
     const sendMessage = (event) => {
@@ -39,7 +39,7 @@ const registerDOMHandlers = (socket) => {
         const username = localStorage.getItem('username')
         const key = localStorage.getItem('roomKey')
 
-        socket.emit('sendMessage', message, username, key)
+        socket.emit(EVENTS.SEND_MESSAGE, message, username, key)
         $('#messageInput').val("")
 
     }
@@ -84,13 +84,13 @@ const registerDOMHandlers = (socket) => {
     }
 
     const updateTypingStatus = throttle(() => {
-        socket.emit("typing", localStorage.getItem('username'), localStorage.getItem('roomKey'))
+        socket.emit(EVENTS.TYPING, localStorage.getItem('username'), localStorage.getItem('roomKey'))
     })
 
     const updateActivityStatus = throttle(() => {
 
         if (localStorage.getItem('username') && localStorage.getItem('roomKey')) {
-            socket.emit('updateStatus', localStorage.getItem("username"), localStorage.getItem("roomKey"), "active")
+            socket.emit(EVENTS.UPDATE_STATUS, localStorage.getItem("username"), localStorage.getItem("roomKey"), "active")
         }
         
     })
@@ -121,7 +121,7 @@ const registerDOMHandlers = (socket) => {
 
                     console.log(`Emitting an update status: ${localStorage.getItem('username')} ${localStorage.getItem('roomKey')}`)
 
-                    socket.emit('updateStatus', localStorage.getItem("username"), localStorage.getItem("roomKey"), "idle")
+                    socket.emit(EVENTS.UPDATE_STATUS, localStorage.getItem("username"), localStorage.getItem("roomKey"), "idle")
 
                 }
 

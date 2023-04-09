@@ -1,4 +1,4 @@
-const registerSocketHandlers = (socket) => {
+const registerSocketHandlers = (socket, EVENTS) => {
 
     const sendRoomId = (roomId) => {
 
@@ -61,13 +61,13 @@ const registerSocketHandlers = (socket) => {
 
     }
 
-    socket.on("sendRoomId", sendRoomId)
-    socket.on("sendRoom", sendRoom)
-    socket.on("roomNotFound", roomNotFound)
-    socket.on("updateMessages", updateMessages)
-    socket.on("updateUsers", updateUsers)
-    socket.on('typing', typing)
-    socket.on("leaveRoom", leaveRoom)
-    socket.on("updateUserStatus", updateUserStatus)
+    socket.on(EVENTS.SEND_ROOM_ID, sendRoomId)
+    socket.on(EVENTS.SEND_ROOM, sendRoom)
+    socket.on(EVENTS.ROOM_NOT_FOUND, roomNotFound)
+    socket.on(EVENTS.UPDATE_MESSAGES, updateMessages)
+    socket.on(EVENTS.UPDATE_USERS, updateUsers)
+    socket.on(EVENTS.USER_TYPING, typing)
+    socket.on(EVENTS.LEAVE_ROOM, leaveRoom)
+    socket.on(EVENTS.UPDATE_STATUS, updateUserStatus)
 
 }
