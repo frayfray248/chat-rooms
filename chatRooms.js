@@ -24,20 +24,25 @@ const getRoom = (roomId) => {
 }
 
 // get a user in a room
-const getUser = (username, roomId) => {
+const getUser = (userId, roomId) => {
 
     const room = getRoom(roomId)
-    const user = room.users.find(user => user.username === username)
+
+    if (!room) return null 
+
+    const user = room.users.find(user => user.id === userId)
+
     return user
 }
 
 
 // add user to room
-const addUser = (username, roomId, status = "active") => {
+const addUser = (id, username, roomId, status = "active") => {
     
     const room = getRoom(roomId)
 
     room.users.push({
+        id : id,
         username : username,
         status: status
     })
@@ -45,20 +50,22 @@ const addUser = (username, roomId, status = "active") => {
 }
 
 // remove a user from a room
-const removeUser = (username, roomId) => {
+const removeUser = (userId, roomId) => {
     
     const room = getRoom(roomId)
 
-    const user = getUser(username, roomId)
+    const user = getUser(userId, roomId)
 
     room.users.splice(room.users.indexOf(user), 1)
 
 }
 
 // add a new message to a room
-const addMessage = (message, username, roomId) => {
+const addMessage = (message, userId, roomId) => {
 
-    const newMessage = { text: message, username: username }
+    const user = getUser(userId, roomId)
+
+    const newMessage = { text: message, username: user.username }
 
     const room = getRoom(roomId)
 
@@ -76,9 +83,10 @@ const getMessages = (roomId) => {
 }
 
 // set the status of a user
-const setUserStatus = (username, status, roomId) => {
+const setUserStatus = (userId, status, roomId) => {
+    console.log(userId, status, roomId)
 
-    const user = getUser(username, roomId)
+    const user = getUser(userId, roomId)
 
     user.status = status
 

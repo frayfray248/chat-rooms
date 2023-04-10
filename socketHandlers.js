@@ -1,4 +1,4 @@
-const chatRoom = require('./chatRoom')
+const chatRooms = require('./chatRooms')
 const EVENTS = require('./events')
 
 module.exports = (io, socket) => {
@@ -6,7 +6,7 @@ module.exports = (io, socket) => {
     // create a room
     const createRoom = () => {
 
-        const newRoomId = chatRoom.createRoom()
+        const newRoomId = chatRooms.createRoom()
 
         socket.emit(EVENTS.SEND_ROOM_ID, newRoomId)
 
@@ -15,11 +15,11 @@ module.exports = (io, socket) => {
     // join a socket to a room
     const joinRoom = (roomId, username) => {
 
-        const room = chatRoom.getRoom(roomId)
+        const room = chatRooms.getRoom(roomId)
 
         if (room) {
             socket.join(roomId)
-            chatRoom.addUser(username, room.id)
+            chatRooms.addUser(socket.id, username, room.id)
             socket.emit(EVENTS.SEND_ROOM, room)
             io.to(room.id).emit(EVENTS.UPDATE_USERS, room.users)
         }
@@ -30,10 +30,10 @@ module.exports = (io, socket) => {
     }
 
     // disconnect a socket from a room
-    const leaveRoom = (username, roomId) => {
+    const leaveRoom = (roomId) => {
 
-        const room = chatRoom.getRoom(roomId)
-        chatRoom.removeUser(username, room.id)
+        const room = chatRooms.getRoom(roomId)
+        chatRooms.removeUser(socket.id, room.id)
         socket.leave(room.id)
         socket.emit(EVENTS.LEAVE_ROOM)
         io.to(room.id).emit(EVENTS.UPDATE_USERS, room.users)
@@ -41,11 +41,11 @@ module.exports = (io, socket) => {
     }
 
     // send message to a room
-    const sendMessage = (message, username, roomId) => {
+    const sendMessage = (message, roomId) => {
 
-        chatRoom.addMessage(message, username, roomId)
+        chatRooms.addMessage(message, socket.id, roomId)
         
-        const room = chatRoom.getRoom(roomId)
+        const room = chatRooms.getRoom(roomId)
 
         io.to(roomId).emit(EVENTS.UPDATE_MESSAGES, room.messages)
 
@@ -59,13 +59,9 @@ module.exports = (io, socket) => {
 
     const updateStatus = (username, roomId, status) => {
 
-        console.log(username)
-        console.log(roomId)
-        console.log(status)
-        const room = chatRoom.getRoom(roomId)
-        console.log(room)
+        const room = chatRooms.getRoom(roomId)
 
-        chatRoom.setUserStatus(username, status, roomId)
+        chatRooms.setUserStatus(socket.id, status, roomId)
         io.to(room.id).emit(EVENTS.UPDATE_USERS, room.users)
         //io.to(roomId).emit("updateUserStatus", username, status)
 
@@ -74,7 +70,7 @@ module.exports = (io, socket) => {
     // get a room
     const getMessages = (roomId) => {
 
-        chatRoom.getMessages(roomId)
+        chatRooms.getMessages(roomId)
 
     }
 
@@ -87,7 +83,7 @@ module.exports = (io, socket) => {
     
             } catch (error) {
     
-                console.log(error)
+                console.log(error.message)
                 socket.emit(EVENTS.ERROR, "Server error")
     
             }

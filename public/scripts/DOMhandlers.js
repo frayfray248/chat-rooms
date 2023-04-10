@@ -20,14 +20,13 @@ const registerDOMHandlers = (socket, EVENTS) => {
     }
 
     const leaveRoomHandler = (event) => {
-        const username = localStorage.getItem('username')
         const roomId = localStorage.getItem('roomKey')
 
         localStorage.removeItem('username')
         localStorage.removeItem('roomKey')
         resetIdleTimer(event.data.socket)
 
-        socket.emit(EVENTS.LEAVE_ROOM, username, roomId)
+        socket.emit(EVENTS.LEAVE_ROOM, roomId)
     }
 
     const sendMessage = (event) => {
@@ -36,10 +35,10 @@ const registerDOMHandlers = (socket, EVENTS) => {
         if (!message) return
 
         const socket = event.data.socket
-        const username = localStorage.getItem('username')
+        //const username = localStorage.getItem('username')
         const key = localStorage.getItem('roomKey')
 
-        socket.emit(EVENTS.SEND_MESSAGE, message, username, key)
+        socket.emit(EVENTS.SEND_MESSAGE, message, key)
         $('#messageInput').val("")
 
     }
