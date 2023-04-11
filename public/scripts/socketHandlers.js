@@ -24,6 +24,20 @@ const registerSocketHandlers = (socket, EVENTS) => {
 
     }
 
+    const closeRoom = () => {
+
+        chatRoom.clear()
+        chatRoom.hide()
+        $(selectors.joinRoomForm).show()
+
+    }
+
+    const removeUser = (username) => {
+
+        chatRoom.removeUser(username)
+
+    }
+
     const leaveRoom = () => {
 
         chatRoom.hide()
@@ -43,17 +57,53 @@ const registerSocketHandlers = (socket, EVENTS) => {
 
     }
 
-    const updateUsers = (users) => {
+    const receiveMessage = (text, username) => {
 
-        chatRoom.renderUsersList(users)
+        chatRoom.appendMessage(text, username)
+
+    }
+
+    const receiveUser = (user) => {
+
+        chatRoom.addUser(user, false)
 
     }
 
-    const userTyping = (username) => {
+    const updateUser = (user) => {
 
-        chatRoom.updateTyping(username)
+        chatRoom.updateUser(user)
 
     }
+
+    const userTyping = (() => {
+
+        const typingTimers = new Map()
+
+        return (username) => {
+
+            chatRoom.showUserTyping(username, true)
+
+            const typingTimer = typingTimers.get(username)
+
+            if (typingTimer) {
+
+                clearTimeout(typingTimer)
+
+            }
+
+            const timeout = setTimeout(() => {
+
+                console.log(`${username} is done typing`)
+
+                chatRoom.showUserTyping(username, false)
+
+            }, 1500)
+
+            typingTimers.set(username, timeout)
+
+        }
+    })()
+
 
     const updateUserStatus = (username, status) => {
 
@@ -70,11 +120,15 @@ const registerSocketHandlers = (socket, EVENTS) => {
     socket.on(EVENTS.SEND_ROOM_ID, sendRoomId)
     socket.on(EVENTS.ROOM_NOT_FOUND, roomNotFound)
     socket.on(EVENTS.UPDATE_MESSAGES, updateMessages)
-    socket.on(EVENTS.UPDATE_USERS, updateUsers)
+    socket.on(EVENTS.USER_JOINED, receiveUser)
+    socket.on(EVENTS.USER_LEFT, removeUser)
+    socket.on(EVENTS.UPDATE_USER, updateUser)
     socket.on(EVENTS.USER_TYPING, userTyping)
     socket.on(EVENTS.LEAVE_ROOM, leaveRoom)
-    socket.on(EVENTS.UPDATE_STATUS, updateUserStatus)
+    socket.on(EVENTS.UPDATE_USER_STATUS, updateUserStatus)
     socket.on(EVENTS.ERROR, handleError)
     socket.on(EVENTS.SHOW_ROOM, showRoom)
+    socket.on(EVENTS.CLOSE_ROOM, closeRoom)
+    socket.on(EVENTS.SEND_MESSAGE, receiveMessage)
 
 }

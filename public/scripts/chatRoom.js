@@ -1,12 +1,5 @@
 const chatRoom = (() => {
 
-    const updateTypingHandlers = new Map()
-    const userStatus = {
-        active : "active",
-        idle : "idle",
-        away : "away"
-    }
-
     const appendMessage = (text, username) => {
 
         const chatWindowMessages = $(selectors.chatWindowMessages)
@@ -33,6 +26,14 @@ const chatRoom = (() => {
 
     }
 
+    const clear = () => {
+
+        $(selectors.chatWindowMessages).empty()
+        $(selectors.chatRoomUsersList).empty()
+        $(selectors.chatRoomId).empty()
+
+    }
+
     const renderMessages = (messages) => {
 
         const chatWindowMessages = $(selectors.chatWindowMessages)
@@ -44,59 +45,46 @@ const chatRoom = (() => {
         }
     }
 
-    const renderUsersList = (users) => {
+    const addUser = (user, isClient) => {
 
         const chatRoomUsersList = $(selectors.chatRoomUsersList)
-        chatRoomUsersList.empty()
 
-        for (const user of users) {
-
-            const isClient = user.username === localStorage.getItem('username')
-
-            const userListItem = `
-            <li class="user-item" >
+        const userListItem = `
+            <li id=${user.username}ListItem class="user-item" >
                 <span id="${user.username}Status" class="users-list-status-light ${user.status}"></span>
                 <span class="users-list-user">${user.username} ${isClient ? "(You)" : ""}</span>
                 <span id="${user.username}Typing" style="display: none;">typing...</span>
             </li>
             `
 
-            if (isClient) {
-                chatRoomUsersList.prepend(userListItem)
-            }
-            else {
-                chatRoomUsersList.append(userListItem)
-            }
+        if (isClient) {
+            chatRoomUsersList.prepend(userListItem)
+        }
+        else {
+            chatRoomUsersList.append(userListItem)
+        }
 
-            // update typing handler closure for user
-            const updateTypingHandler = () => {
+    }
 
-                let timeout
+    const renderUsersList = (users) => {
 
-                return (username) => {
+        // clear user list
+        $(selectors.chatRoomUsersList).empty()
 
-                    if (timeout) {
+        // add each user
+        for (const user of users) {
 
-                        clearTimeout(timeout)
+            const isClient = user.username === localStorage.getItem('username')
 
-                    }
-
-                    $(selectors.userTyping(username)).show()
-                    console.log(`${username} is typing`)
-
-                    timeout = setTimeout(() => {
-
-                        $(selectors.userTyping(username)).hide()
-                        timeout = null;
-
-                    }, 1500)
-
-                }
-            }
-
-            updateTypingHandlers.set(user.username, updateTypingHandler())
+            addUser(user, isClient)
 
         }
+
+    }
+
+    const removeUser = (username) => {
+
+        $(selectors.userListItem(username)).remove()
 
     }
 
@@ -104,44 +92,26 @@ const chatRoom = (() => {
 
         renderUsersList(users)
 
-        $(selectors.chatRoomUsernameTitle).html(`Room: ${roomId}`)
-
         $(selectors.chatRoomId).html(`Room: ${roomId}`)
 
         renderMessages(messages)
 
     }
 
+    const updateUserStatus = (username, status) => {
 
-    const updateTyping = (username) => {
-
-        const handler = updateTypingHandlers.get(username)
-
-        handler(username)
+        $(selectors.userStatus(username)).attr('class', `users-list-status-light ${status}`)
 
     }
 
-    const updateUserStatus = (username, status) => {
+    const showUserTyping = (username, show) => {
 
-        console.log(`${username} is now ${status}`)
-
-
-        if (status === userStatus.active) {
-
-            $(selectors.userStatus(username)).attr('class', 'users-list-status-light active')
-            
+        if (show) {
+            $(selectors.userTyping(username)).show()
         }
-        else if (status === userStatus.idle) {
-
-            $(selectors.userStatus(username)).attr('class', 'users-list-status-light idle')
-
+        else {
+            $(selectors.userTyping(username)).hide()
         }
-        else if (status === userStatus.away) {
-
-            $(selectors.userStatus(username)).attr('class', 'users-list-status-light away')
-
-        }
-
     }
 
 
@@ -150,10 +120,13 @@ const chatRoom = (() => {
         show: show,
         setUp: setUp,
         hide: hide,
+        clear: clear,
         renderUsersList: renderUsersList,
         renderMessages: renderMessages,
-        updateTyping: updateTyping,
-        updateUserStatus : updateUserStatus
+        updateUserStatus: updateUserStatus,
+        showUserTyping: showUserTyping,
+        addUser : addUser,
+        removeUser : removeUser
     }
 
 })()

@@ -30,14 +30,13 @@ const registerDOMHandlers = (socket, EVENTS) => {
     }
 
     const sendMessage = (event) => {
-        const message = $('#messageInput').val()
+        const text = $('#messageInput').val()
 
-        if (!message) return
+        if (!text) return
 
         const socket = event.data.socket
-        const key = localStorage.getItem('roomId')
 
-        socket.emit(EVENTS.SEND_MESSAGE, message, key)
+        socket.emit(EVENTS.SEND_MESSAGE, text)
         $('#messageInput').val("")
 
     }
@@ -100,7 +99,7 @@ const registerDOMHandlers = (socket, EVENTS) => {
 
     const resetIdleTimer = (() => {
 
-
+        
 
         let timeout
 

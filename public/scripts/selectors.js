@@ -12,5 +12,6 @@ const selectors = {
     messageInput : "#messageInput",
     userTyping : (username) => `#${username}Typing`,
     userStatus : (username) => `#${username}Status`,
+    userListItem : (username) => `#${username}ListItem`,
     chatRoomLeaveButton : '#chatRoomLeaveButton'
 }

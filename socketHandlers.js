@@ -39,13 +39,15 @@ module.exports = (io, socket) => {
         if (room) {
             // join socket to room
             socket.join(roomId)
-            
+
+            const newUser = {
+                username: username,
+                roomId: roomId,
+                status: "active"
+            }
+
             // create a new user
-            userStore.add(socket.id, { 
-                username : username, 
-                roomId: roomId, 
-                status : "active"
-            })
+            userStore.add(socket.id, newUser)
 
             // get all users in the room
             const users = await getRoomUsers(roomId)
@@ -54,7 +56,7 @@ module.exports = (io, socket) => {
             socket.emit(EVENTS.SHOW_ROOM, roomId, room.messages, users)
 
             // update all clients' users list
-            io.to(room.id).emit(EVENTS.UPDATE_USERS, users)
+            socket.to(room.id).emit(EVENTS.USER_JOINED, newUser)
         }
         else {
             socket.emit(EVENTS.ROOM_NOT_FOUND, roomId)
@@ -74,8 +76,8 @@ module.exports = (io, socket) => {
 
         const users = await getRoomUsers(roomId)
 
-        socket.emit(EVENTS.LEAVE_ROOM)
-        io.to(roomId).emit(EVENTS.UPDATE_USERS, users)
+        socket.emit(EVENTS.CLOSE_ROOM)
+        socket.to(roomId).emit(EVENTS.USER_LEFT, user.username)
 
     }
 
@@ -86,16 +88,15 @@ module.exports = (io, socket) => {
         const roomId = user.roomId
 
         chatRoomStore.addMessage(text, user.username, roomId)
-        
-        const room = chatRoomStore.getRoom(roomId)
 
-        io.to(roomId).emit(EVENTS.UPDATE_MESSAGES, room.messages)
+        io.to(roomId).emit(EVENTS.SEND_MESSAGE, text, user.username)
 
     }
 
     const typing = async () => {
 
         const user = userStore.get(socket.id)
+
         const roomId = user.roomId
 
         io.to(roomId).emit(EVENTS.USER_TYPING, user.username)
@@ -112,7 +113,7 @@ module.exports = (io, socket) => {
             const roomId = user.roomId
 
             // update all clients' users list
-            io.to(roomId).emit(EVENTS.UPDATE_USERS, await getRoomUsers(roomId))
+            io.to(roomId).emit(EVENTS.UPDATE_USER_STATUS, user.username, status)
 
         }
         else {
@@ -134,12 +135,12 @@ module.exports = (io, socket) => {
         return (...args) => {
             try {
                 socketHandler(...args)
-    
+
             } catch (error) {
-    
+
                 console.log(error)
                 socket.emit(EVENTS.ERROR, "Server error")
-    
+
             }
         }
     }
