@@ -100,15 +100,15 @@ const chatRoom = (() => {
 
     }
 
-    const setUp = (room, username) => {
+    const setUp = (roomId, messages, users) => {
 
-        renderUsersList(room.users)
+        renderUsersList(users)
 
-        $(selectors.chatRoomUsernameTitle).html(`Room: ${room.id}`)
+        $(selectors.chatRoomUsernameTitle).html(`Room: ${roomId}`)
 
-        $(selectors.chatRoomId).html(`Room: ${room.id}`)
+        $(selectors.chatRoomId).html(`Room: ${roomId}`)
 
-        renderMessages(room.messages)
+        renderMessages(messages)
 
     }
 

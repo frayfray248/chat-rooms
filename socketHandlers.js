@@ -1,27 +1,60 @@
-const chatRooms = require('./chatRooms')
+const chatRoomStore = require('./chatRoomStore')
+const userStore = require('./userStore')
 const EVENTS = require('./events')
 
 module.exports = (io, socket) => {
 
+    // helper method to get all users in a room
+    const getRoomUsers = async (roomId) => {
+
+        // get all sockets in a room
+        const roomSockets = await io.in(roomId).fetchSockets()
+        const roomUsers = []
+
+        // get all user data by the fetched socket IDs
+        for (const roomSocket of roomSockets) {
+
+            roomUsers.push(userStore.get(roomSocket.id))
+
+        }
+
+        return roomUsers
+
+    }
+
     // create a room
     const createRoom = () => {
 
-        const newRoomId = chatRooms.createRoom()
+        const newRoomId = chatRoomStore.createRoom()
 
         socket.emit(EVENTS.SEND_ROOM_ID, newRoomId)
 
     }
 
     // join a socket to a room
-    const joinRoom = (roomId, username) => {
+    const joinRoom = async (roomId, username) => {
 
-        const room = chatRooms.getRoom(roomId)
+        const room = chatRoomStore.getRoom(roomId)
 
         if (room) {
+            // join socket to room
             socket.join(roomId)
-            chatRooms.addUser(socket.id, username, room.id)
-            socket.emit(EVENTS.SEND_ROOM, room)
-            io.to(room.id).emit(EVENTS.UPDATE_USERS, room.users)
+            
+            // create a new user
+            userStore.add(socket.id, { 
+                username : username, 
+                roomId: roomId, 
+                status : "active"
+            })
+
+            // get all users in the room
+            const users = await getRoomUsers(roomId)
+
+            // inform the client to set up the room
+            socket.emit(EVENTS.SHOW_ROOM, roomId, room.messages, users)
+
+            // update all clients' users list
+            io.to(room.id).emit(EVENTS.UPDATE_USERS, users)
         }
         else {
             socket.emit(EVENTS.ROOM_NOT_FOUND, roomId)
@@ -30,47 +63,68 @@ module.exports = (io, socket) => {
     }
 
     // disconnect a socket from a room
-    const leaveRoom = (roomId) => {
+    const leaveRoom = async () => {
 
-        const room = chatRooms.getRoom(roomId)
-        chatRooms.removeUser(socket.id, room.id)
-        socket.leave(room.id)
+        const user = userStore.get(socket.id)
+        const roomId = user.roomId
+
+        socket.leave(roomId)
+
+        userStore.remove(socket.id)
+
+        const users = await getRoomUsers(roomId)
+
         socket.emit(EVENTS.LEAVE_ROOM)
-        io.to(room.id).emit(EVENTS.UPDATE_USERS, room.users)
+        io.to(roomId).emit(EVENTS.UPDATE_USERS, users)
 
     }
 
     // send message to a room
-    const sendMessage = (message, roomId) => {
+    const sendMessage = async (text) => {
 
-        chatRooms.addMessage(message, socket.id, roomId)
+        const user = userStore.get(socket.id)
+        const roomId = user.roomId
+
+        chatRoomStore.addMessage(text, user.username, roomId)
         
-        const room = chatRooms.getRoom(roomId)
+        const room = chatRoomStore.getRoom(roomId)
 
         io.to(roomId).emit(EVENTS.UPDATE_MESSAGES, room.messages)
 
     }
 
-    const typing = (username, roomId) => {
-        
-        io.to(roomId).emit("typing", username)
+    const typing = async () => {
+
+        const user = userStore.get(socket.id)
+        const roomId = user.roomId
+
+        io.to(roomId).emit(EVENTS.USER_TYPING, user.username)
 
     }
 
-    const updateStatus = (username, roomId, status) => {
+    const updateStatus = async (status) => {
 
-        const room = chatRooms.getRoom(roomId)
+        const user = userStore.get(socket.id)
 
-        chatRooms.setUserStatus(socket.id, status, roomId)
-        io.to(room.id).emit(EVENTS.UPDATE_USERS, room.users)
-        //io.to(roomId).emit("updateUserStatus", username, status)
+        if (user) {
+
+            user.status = status
+            const roomId = user.roomId
+
+            // update all clients' users list
+            io.to(roomId).emit(EVENTS.UPDATE_USERS, await getRoomUsers(roomId))
+
+        }
+        else {
+            socket.emit(EVENTS.ERROR, `User ${socket.id} not found`)
+        }
 
     }
 
     // get a room
     const getMessages = (roomId) => {
 
-        chatRooms.getMessages(roomId)
+        chatRoomStore.getMessages(roomId)
 
     }
 
@@ -83,7 +137,7 @@ module.exports = (io, socket) => {
     
             } catch (error) {
     
-                console.log(error.message)
+                console.log(error)
                 socket.emit(EVENTS.ERROR, "Server error")
     
             }

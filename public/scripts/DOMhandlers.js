@@ -89,7 +89,7 @@ const registerDOMHandlers = (socket, EVENTS) => {
     const updateActivityStatus = throttle(() => {
 
         if (localStorage.getItem('username') && localStorage.getItem('roomKey')) {
-            socket.emit(EVENTS.UPDATE_STATUS, localStorage.getItem("username"), localStorage.getItem("roomKey"), "active")
+            socket.emit(EVENTS.UPDATE_STATUS, "active")
         }
         
     })
@@ -110,7 +110,6 @@ const registerDOMHandlers = (socket, EVENTS) => {
             clearTimeout(timeout)
 
             if (!localStorage.getItem('username') || !localStorage.getItem('roomKey')) {
-                console.log('not in a chatroom')
                 return
             }
 
@@ -118,9 +117,7 @@ const registerDOMHandlers = (socket, EVENTS) => {
 
                 if (localStorage.getItem('username') && localStorage.getItem('roomKey')) {
 
-                    console.log(`Emitting an update status: ${localStorage.getItem('username')} ${localStorage.getItem('roomKey')}`)
-
-                    socket.emit(EVENTS.UPDATE_STATUS, localStorage.getItem("username"), localStorage.getItem("roomKey"), "idle")
+                    socket.emit(EVENTS.UPDATE_STATUS, "idle")
 
                 }
 

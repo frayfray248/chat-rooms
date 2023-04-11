@@ -6,12 +6,12 @@ const registerSocketHandlers = (socket, EVENTS) => {
 
     }
 
-    const sendRoom = (room) => {
+    const showRoom = (roomId, messages, users) => {
 
         const username = $('#usernameInput').val()
 
         // store room and username
-        localStorage.setItem('roomKey', room.id)
+        localStorage.setItem('roomKey', roomId)
         localStorage.setItem('username', username)
 
         // clear and hide join room form
@@ -19,7 +19,7 @@ const registerSocketHandlers = (socket, EVENTS) => {
         $(selectors.joinRoomForm).hide()
 
         // show chat room gui
-        chatRoom.setUp(room, username)
+        chatRoom.setUp(roomId, messages, users)
         chatRoom.show()
 
     }
@@ -49,7 +49,7 @@ const registerSocketHandlers = (socket, EVENTS) => {
 
     }
 
-    const typing = (username) => {
+    const userTyping = (username) => {
 
         chatRoom.updateTyping(username)
 
@@ -68,13 +68,13 @@ const registerSocketHandlers = (socket, EVENTS) => {
     }
 
     socket.on(EVENTS.SEND_ROOM_ID, sendRoomId)
-    socket.on(EVENTS.SEND_ROOM, sendRoom)
     socket.on(EVENTS.ROOM_NOT_FOUND, roomNotFound)
     socket.on(EVENTS.UPDATE_MESSAGES, updateMessages)
     socket.on(EVENTS.UPDATE_USERS, updateUsers)
-    socket.on(EVENTS.USER_TYPING, typing)
+    socket.on(EVENTS.USER_TYPING, userTyping)
     socket.on(EVENTS.LEAVE_ROOM, leaveRoom)
     socket.on(EVENTS.UPDATE_STATUS, updateUserStatus)
     socket.on(EVENTS.ERROR, handleError)
+    socket.on(EVENTS.SHOW_ROOM, showRoom)
 
 }

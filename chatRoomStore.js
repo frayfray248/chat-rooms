@@ -10,7 +10,7 @@ const createRoom = () => {
     rooms.push({
         id: newRoomId,
         messages: [],
-        users: []
+        //users: []
     })
 
     return newRoomId
@@ -23,49 +23,13 @@ const getRoom = (roomId) => {
 
 }
 
-// get a user in a room
-const getUser = (userId, roomId) => {
-
-    const room = getRoom(roomId)
-
-    if (!room) return null 
-
-    const user = room.users.find(user => user.id === userId)
-
-    return user
-}
-
-
-// add user to room
-const addUser = (id, username, roomId, status = "active") => {
-    
-    const room = getRoom(roomId)
-
-    room.users.push({
-        id : id,
-        username : username,
-        status: status
-    })
-
-}
-
-// remove a user from a room
-const removeUser = (userId, roomId) => {
-    
-    const room = getRoom(roomId)
-
-    const user = getUser(userId, roomId)
-
-    room.users.splice(room.users.indexOf(user), 1)
-
-}
 
 // add a new message to a room
-const addMessage = (message, userId, roomId) => {
+const addMessage = (text, username, roomId) => {
 
-    const user = getUser(userId, roomId)
+    //const user = getUser(userId, roomId)
 
-    const newMessage = { text: message, username: user.username }
+    const newMessage = { text: text, username: username }
 
     const room = getRoom(roomId)
 
@@ -97,7 +61,5 @@ module.exports = {
     getRoom : getRoom,
     addMessage : addMessage,
     getMessages : getMessages,
-    addUser : addUser,
-    removeUser : removeUser,
     setUserStatus : setUserStatus
 }
