@@ -11,7 +11,7 @@ const registerSocketHandlers = (socket, EVENTS) => {
         const username = $('#usernameInput').val()
 
         // store room and username
-        localStorage.setItem('roomKey', roomId)
+        localStorage.setItem('roomId', roomId)
         localStorage.setItem('username', username)
 
         // clear and hide join room form
