@@ -28,9 +28,9 @@
 }
 
 .column-1 {
-    flex-grow: 1;
+    flex: 1;
 }
 
 .column-3 {
-    flex-grow: 3;
+    flex: 3;
 }

@@ -9,7 +9,8 @@ const createRoom = () => {
 
     rooms.push({
         id: newRoomId,
-        messages: []
+        messages: [],
+        //users: []
     })
 
     return newRoomId
@@ -22,10 +23,13 @@ const getRoom = (roomId) => {
 
 }
 
-// add a new message to a room
-const addMessage = (message, username, roomId) => {
 
-    const newMessage = { text: message, username: username }
+// add a new message to a room
+const addMessage = (text, username, roomId) => {
+
+    //const user = getUser(userId, roomId)
+
+    const newMessage = { text: text, username: username }
 
     const room = getRoom(roomId)
 
@@ -42,9 +46,20 @@ const getMessages = (roomId) => {
     
 }
 
+// set the status of a user
+const setUserStatus = (userId, status, roomId) => {
+    console.log(userId, status, roomId)
+
+    const user = getUser(userId, roomId)
+
+    user.status = status
+
+}
+
 module.exports = {
     createRoom : createRoom,
     getRoom : getRoom,
     addMessage : addMessage,
-    getMessages : getMessages
+    getMessages : getMessages,
+    setUserStatus : setUserStatus
 }

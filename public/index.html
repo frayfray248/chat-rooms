@@ -19,7 +19,7 @@
 
             <h1>Chat Rooms</h1>
 
-            <button id="createRoomButton" class="button" type="button">Create Room</button>
+            <button id="createRoomButton" class="button button-menu" type="button">Create Room</button>
 
             <div class="d-flex gap-5 align-center justify-end">
                 <label for="roomIdInput" class="label">Room ID:</label>
@@ -31,7 +31,7 @@
                 <input id="usernameInput" class="input" placeholder="Enter a username" type="text" required>
             </div>
 
-            <input type="submit" class="button" value="Join">
+            <input type="submit" class="button button-menu" value="Join">
 
         </form>
 
@@ -40,6 +40,9 @@
 
             <!-- Side Menu -->
             <div class="column-1 side-menu">
+                <ul id="chatRoomUsersList" class="users-list">
+
+                </ul>
             </div>
 
             <!-- Chat -->
@@ -47,12 +50,15 @@
                 
                 <!-- Chat Title -->
                 <div class="chatroom-title">
-                    <h1 id="chatRoomUsernameTitle"></h1>
+                    <h1 id="chatRoomId"></h1>
+                    <button id="chatRoomLeaveButton" class="button button-chatroom">Leave</button>
                 </div>
 
                 <!-- Chat Window -->
                 <div id="chatWindow" class="chatroom-chat-window">
+                    <ul id="chatWindowMessages" class="chatroom-chat-messages">
 
+                    </ul>
                 </div>
 
                 <!-- Chat Message Form-->
@@ -69,6 +75,7 @@
 
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/scripts/joinRoomForm.js"></script>
     <script src="/scripts/chatRoom.js"></script>
     <script src="/scripts/selectors.js"></script>
     <script src="/scripts/DOMhandlers.js"></script>

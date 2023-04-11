@@ -11,6 +11,12 @@
 .side-menu {
     background-color: var(--sec-bg-color);
     border-right: 2px solid var(--border-color);
+    padding: 20px;
+}
+
+.button-menu {
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
 }
 
 
