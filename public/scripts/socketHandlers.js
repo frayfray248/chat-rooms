@@ -32,46 +32,21 @@ const registerSocketHandlers = (socket, EVENTS) => {
 
     }
 
-    const removeUser = (username) => {
-
-        chatRoom.removeUser(username)
-
-    }
-
-    const leaveRoom = () => {
-
-        chatRoom.hide()
-        $(selectors.joinRoomForm).show()
-
-    }
-
-    const roomNotFound = (roomId) => {
-
-        alert(`Room ${roomId} not found`)
-
-    }
-
-    const updateMessages = (messages) => {
-
-        chatRoom.renderMessages(messages)
-
-    }
-
-    const receiveMessage = (text, username) => {
-
-        chatRoom.appendMessage(text, username)
-
-    }
-
     const receiveUser = (user) => {
 
         chatRoom.addUser(user, false)
 
     }
 
-    const updateUser = (user) => {
+    const removeUser = (username) => {
 
-        chatRoom.updateUser(user)
+        chatRoom.removeUser(username)
+
+    }
+
+    const updateUserStatus = (username, status) => {
+
+        chatRoom.updateUserStatus(username, status)
 
     }
 
@@ -105,9 +80,16 @@ const registerSocketHandlers = (socket, EVENTS) => {
     })()
 
 
-    const updateUserStatus = (username, status) => {
+    const receiveMessage = (text, username) => {
 
-        chatRoom.updateUserStatus(username, status)
+        chatRoom.appendMessage(text, username)
+
+    }
+    
+
+    const roomNotFound = (roomId) => {
+
+        alert(`Room ${roomId} not found`)
 
     }
 
@@ -118,17 +100,14 @@ const registerSocketHandlers = (socket, EVENTS) => {
     }
 
     socket.on(EVENTS.SEND_ROOM_ID, sendRoomId)
-    socket.on(EVENTS.ROOM_NOT_FOUND, roomNotFound)
-    socket.on(EVENTS.UPDATE_MESSAGES, updateMessages)
-    socket.on(EVENTS.USER_JOINED, receiveUser)
-    socket.on(EVENTS.USER_LEFT, removeUser)
-    socket.on(EVENTS.UPDATE_USER, updateUser)
-    socket.on(EVENTS.USER_TYPING, userTyping)
-    socket.on(EVENTS.LEAVE_ROOM, leaveRoom)
-    socket.on(EVENTS.UPDATE_USER_STATUS, updateUserStatus)
-    socket.on(EVENTS.ERROR, handleError)
     socket.on(EVENTS.SHOW_ROOM, showRoom)
     socket.on(EVENTS.CLOSE_ROOM, closeRoom)
+    socket.on(EVENTS.USER_JOINED, receiveUser)
+    socket.on(EVENTS.USER_LEFT, removeUser)
+    socket.on(EVENTS.UPDATE_USER_STATUS, updateUserStatus)
+    socket.on(EVENTS.USER_TYPING, userTyping)
     socket.on(EVENTS.SEND_MESSAGE, receiveMessage)
+    socket.on(EVENTS.ROOM_NOT_FOUND, roomNotFound)
+    socket.on(EVENTS.ERROR, handleError)
 
 }

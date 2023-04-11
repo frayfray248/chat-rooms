@@ -81,28 +81,6 @@ module.exports = (io, socket) => {
 
     }
 
-    // send message to a room
-    const sendMessage = async (text) => {
-
-        const user = userStore.get(socket.id)
-        const roomId = user.roomId
-
-        chatRoomStore.addMessage(text, user.username, roomId)
-
-        io.to(roomId).emit(EVENTS.SEND_MESSAGE, text, user.username)
-
-    }
-
-    const typing = async () => {
-
-        const user = userStore.get(socket.id)
-
-        const roomId = user.roomId
-
-        io.to(roomId).emit(EVENTS.USER_TYPING, user.username)
-
-    }
-
     const updateStatus = async (status) => {
 
         const user = userStore.get(socket.id)
@@ -119,6 +97,28 @@ module.exports = (io, socket) => {
         else {
             socket.emit(EVENTS.ERROR, `User ${socket.id} not found`)
         }
+
+    }
+
+    const typing = async () => {
+
+        const user = userStore.get(socket.id)
+
+        const roomId = user.roomId
+
+        io.to(roomId).emit(EVENTS.USER_TYPING, user.username)
+
+    }
+
+    // send message to a room
+    const sendMessage = async (text) => {
+
+        const user = userStore.get(socket.id)
+        const roomId = user.roomId
+
+        chatRoomStore.addMessage(text, user.username, roomId)
+
+        io.to(roomId).emit(EVENTS.SEND_MESSAGE, text, user.username)
 
     }
 
@@ -148,10 +148,13 @@ module.exports = (io, socket) => {
 
     socket.on(EVENTS.CREATE_ROOM, errorWrapper(createRoom))
     socket.on(EVENTS.JOIN_ROOM, errorWrapper(joinRoom))
-    socket.on(EVENTS.SEND_MESSAGE, errorWrapper(sendMessage))
-    socket.on(EVENTS.GET_MESSAGES, errorWrapper(getMessages))
-    socket.on(EVENTS.TYPING, errorWrapper(typing))
     socket.on(EVENTS.LEAVE_ROOM, errorWrapper(leaveRoom))
     socket.on(EVENTS.UPDATE_STATUS, errorWrapper(updateStatus))
+    socket.on(EVENTS.TYPING, errorWrapper(typing))
+    socket.on(EVENTS.SEND_MESSAGE, errorWrapper(sendMessage))
+    socket.on(EVENTS.GET_MESSAGES, errorWrapper(getMessages))
+    
+    
+    
 
 }

@@ -136,13 +136,12 @@ const registerDOMHandlers = (socket, EVENTS) => {
     localStorage.removeItem('username')
     localStorage.removeItem('roomId')
 
-    $(selectors.joinRoomForm).on('submit', { socket: socket }, joinRoomHandler)
     $(selectors.createRoomButton).on('click', { socket: socket }, createRoomHandler)
-    $(selectors.messageForm).on('submit', { socket: socket }, sendMessageHandler)
-    $(selectors.messageInput).on('input', typingHandler)
+    $(selectors.joinRoomForm).on('submit', { socket: socket }, joinRoomHandler)
     $(selectors.chatRoomLeaveButton).on('click', { socket: socket }, leaveRoomHandler)
+    $(selectors.messageForm).on('submit', { socket: socket }, sendMessageHandler)
     $(selectors.messageInput).on("keydown", { socket: socket }, enterKeyPressedHandler)
-
+    $(selectors.messageInput).on('input', typingHandler)
     $(document).on("mousemove", { socket: socket }, resetIdleTimerHandler)
     $(document).on("keydown", { socket: socket }, resetIdleTimerHandler)
     $(document).on("touchstart", { socket: socket }, resetIdleTimerHandler)
