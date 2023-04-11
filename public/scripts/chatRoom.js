@@ -1,8 +1,26 @@
 const chatRoom = (() => {
 
+    const chatWindowAtBottom = () => {
+
+        const chatWindow = $(selectors.chatWindow)
+        const scrollHeight = chatWindow.prop('scrollHeight')
+        const clientHeight = chatWindow.prop('clientHeight')
+        const scrollTop = chatWindow.prop('scrollTop')
+
+        return scrollHeight - clientHeight <= scrollTop +1
+    }
+
+    const scrollDown = () => {
+
+        const chatWindow = $(selectors.chatWindow)
+        chatWindow.scrollTop(chatWindow.prop('scrollHeight'))
+
+    }
+
     const appendMessage = (text, username) => {
 
         const chatWindowMessages = $(selectors.chatWindowMessages)
+        const atBottom = chatWindowAtBottom()
 
         chatWindowMessages.append(
             `
@@ -11,6 +29,8 @@ const chatRoom = (() => {
             <p class="chatroom-message-text">${text}</p>
         </li>
         `)
+
+        if (atBottom) scrollDown()
 
     }
 
