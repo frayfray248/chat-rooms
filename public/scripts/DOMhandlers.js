@@ -13,10 +13,13 @@ const registerDOMHandlers = (socket, EVENTS) => {
         event.preventDefault()
 
         const socket = event.data.socket
-        const key = $('#roomIdInput').val()
-        const username = $('#usernameInput').val()
 
-        socket.emit(EVENTS.JOIN_ROOM, key, username)
+        // get join room form input
+        const roomId = joinRoomForm.getRoomIdInput()
+        const username = joinRoomForm.getUsernameInput()
+
+        // request to join room
+        socket.emit(EVENTS.JOIN_ROOM, roomId, username)
     }
 
     const leaveRoomHandler = (event) => {

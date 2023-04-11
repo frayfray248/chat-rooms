@@ -2,21 +2,21 @@ const registerSocketHandlers = (socket, EVENTS) => {
 
     const sendRoomId = (roomId) => {
 
-        $(selectors.roomIdInput).val(roomId)
+        joinRoomForm.setRoomIdInput(roomId)
 
     }
 
     const showRoom = (roomId, messages, users) => {
 
-        const username = $('#usernameInput').val()
+        const username = joinRoomForm.getUsernameInput()
 
         // store room and username
         localStorage.setItem('roomId', roomId)
         localStorage.setItem('username', username)
 
         // clear and hide join room form
-        $(selectors.joinRoomForm).find('input[type="text"').val('')
-        $(selectors.joinRoomForm).hide()
+        joinRoomForm.clear()
+        joinRoomForm.hide()
 
         // show chat room gui
         chatRoom.setUp(roomId, messages, users)
@@ -28,7 +28,7 @@ const registerSocketHandlers = (socket, EVENTS) => {
 
         chatRoom.clear()
         chatRoom.hide()
-        $(selectors.joinRoomForm).show()
+        joinRoomForm.show()
 
     }
 
