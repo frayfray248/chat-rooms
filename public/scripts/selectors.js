@@ -1,3 +1,7 @@
+// This script contains DOM query selectors to be used by jQuery
+// some of these selectors are functions that return a selector
+// based on provided arguments
+
 const selectors = {
     joinRoomForm :  '#joinRoomForm',
     createRoomButton : '#createRoomButton',

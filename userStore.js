@@ -1,9 +1,5 @@
-/*
 
-    This module holds a map that links socket IDs to user data. 
-
-*/
-
+//This module holds a map that links socket IDs to user data. 
 
 const users = new Map()
 

@@ -1,5 +1,10 @@
+// Chat Room Component
+// returns an object of functions to control
+// the Chat Room view
+
 const chatRoom = (() => {
 
+    // check if the client's chat window is scrolled at the buttom
     const chatWindowAtBottom = () => {
 
         const chatWindow = $(selectors.chatWindow)
@@ -10,6 +15,7 @@ const chatRoom = (() => {
         return scrollHeight - clientHeight <= scrollTop +1
     }
 
+    // scroll the chat window to the buttom
     const scrollDown = () => {
 
         const chatWindow = $(selectors.chatWindow)
@@ -17,6 +23,10 @@ const chatRoom = (() => {
 
     }
 
+    // add a message to the chat window and scroll the chat window
+    // down to show the new message. This for when the chat window is 
+    // overflowed. Auto scrolling only happens if the chat window was
+    // already scrolled to the bottom
     const appendMessage = (text, username) => {
 
         const chatWindowMessages = $(selectors.chatWindowMessages)
@@ -30,22 +40,26 @@ const chatRoom = (() => {
         </li>
         `)
 
+
         if (atBottom) scrollDown()
 
     }
 
+    // show the chat room
     const show = () => {
 
         $(selectors.chatRoom).css("display", "flex")
 
     }
 
+    // hide the chat room
     const hide = () => {
 
         $(selectors.chatRoom).css("display", "none")
 
     }
 
+    // clear the chat room's data
     const clear = () => {
 
         $(selectors.chatWindowMessages).empty()
@@ -54,6 +68,7 @@ const chatRoom = (() => {
 
     }
 
+    // render an array of messages to the chat window
     const renderMessages = (messages) => {
 
         const chatWindowMessages = $(selectors.chatWindowMessages)
@@ -65,6 +80,7 @@ const chatRoom = (() => {
         }
     }
 
+    // add a user to the users list side menu and indicate if the user is the current client
     const addUser = (user, isClient) => {
 
         const chatRoomUsersList = $(selectors.chatRoomUsersList)
@@ -86,6 +102,7 @@ const chatRoom = (() => {
 
     }
 
+    // render an array of users 
     const renderUsersList = (users) => {
 
         // clear user list
@@ -102,12 +119,14 @@ const chatRoom = (() => {
 
     }
 
+    // remove a user from the users list
     const removeUser = (username) => {
 
         $(selectors.userListItem(username)).remove()
 
     }
 
+    // inject data into the chat room
     const setUp = (roomId, messages, users) => {
 
         renderUsersList(users)
@@ -118,12 +137,14 @@ const chatRoom = (() => {
 
     }
 
+    // update a user's activity status
     const updateUserStatus = (username, status) => {
 
         $(selectors.userStatus(username)).attr('class', `users-list-status-light ${status}`)
 
     }
 
+    // show or hide a user's typing indicator
     const showUserTyping = (username, show) => {
 
         if (show) {
