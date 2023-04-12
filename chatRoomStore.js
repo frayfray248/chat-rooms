@@ -9,8 +9,7 @@ const createRoom = () => {
 
     rooms.push({
         id: newRoomId,
-        messages: [],
-        //users: []
+        messages: []
     })
 
     return newRoomId
@@ -26,8 +25,6 @@ const getRoom = (roomId) => {
 
 // add a new message to a room
 const addMessage = (text, username, roomId) => {
-
-    //const user = getUser(userId, roomId)
 
     const newMessage = { text: text, username: username }
 
