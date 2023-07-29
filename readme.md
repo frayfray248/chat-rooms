@@ -3,6 +3,9 @@
 ## Purpose
 The purpose of this app is to demonstrate the use of Socket IO in a real-time chat application. 
 
+## Live Demo
+https://chat-rooms.fly.dev/
+
 ## Features
 
 - User created chat rooms
